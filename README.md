@@ -47,12 +47,6 @@ source venv/bin/activate
 ### 3. 📥 Install Dependencies
 
 ```bash
-pip install -r requirements.txt
-```
-
-If you don't have a `requirements.txt`, you can manually install:
-
-```bash
 pip install pydub simpleaudio
 ```
 
@@ -71,7 +65,6 @@ python main.py
 ```
 your_project/
 ├── main.py
-├── requirements.txt
 ├── README.md
 ├── .gitignore
 ├── assets/           # images or audio files
