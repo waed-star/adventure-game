@@ -18,11 +18,9 @@ Get the latest version of the app:
 
 ![Demo Video](assets/demo/demo.mov)
 
-<!-- Or with HTML for more control -->
-<video width="600" controls>
-  <source src="https://youtu.be/aZIQkjyfgGE" type="video">
-  Your browser does not support the video tag.
-</video>
+## 🎬 Demo
+
+[![Demo Video](https://img.youtube.com/vi/aZIQkjyfgGE/maxresdefault.jpg)](https://youtu.be/aZIQkjyfgGE)
 
 ## 🛠 Installation
 
