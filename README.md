@@ -16,10 +16,6 @@ Get the latest version of the app:
 
 ## 🎬 Demo
 
-![Demo Video](assets/demo/demo.mov)
-
-## 🎬 Demo
-
 [![Demo Video](https://img.youtube.com/vi/aZIQkjyfgGE/maxresdefault.jpg)](https://youtu.be/aZIQkjyfgGE)
 
 ## 🛠 Installation
