@@ -23,11 +23,11 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install pydub simpleaudio pyinstaller
+        pip install pydub simpleaudio pyinstaller playsound
         
     - name: Build Windows executable
       run: |
-        pyinstaller main.py --onefile --windowed --add-data "assets;assets" --name "Horror-Game-Windows"
+        pyinstaller main.py --onefile --windowed --add-data "assets;assets" --name "Horror-Game-Windows" --hidden-import=playsound
         
     - name: List dist contents (for debugging)
       run: |

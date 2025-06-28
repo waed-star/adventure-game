@@ -12,19 +12,45 @@ import sys
 import os
 
 def resource_path(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
-    except AttributeError:
-        base_path = os.path.abspath(".")
-    return os.path.join(base_path, relative_path)
+    """Get absolute path to resource, works for dev and for PyInstaller"""
+    
+    # Remove leading ./ if present
+    if relative_path.startswith('./'):
+        relative_path = relative_path[2:]
+    
+    # Try multiple possible locations
+    possible_paths = []
+    
+    # PyInstaller bundle
+    if hasattr(sys, '_MEIPASS'):
+        possible_paths.append(os.path.join(sys._MEIPASS, relative_path))
+    
+    # Development environment
+    possible_paths.append(os.path.join(os.path.dirname(__file__), relative_path))
+    possible_paths.append(os.path.join(os.getcwd(), relative_path))
+    possible_paths.append(relative_path)
+    
+    # Try each path until we find one that exists
+    for path in possible_paths:
+        if os.path.exists(path):
+            return path
+    
+    # If none found, return the first attempt and let it fail with a clear error
+    return possible_paths[0] if possible_paths else relative_path
 
 # Creating a class to store all the similar functions in
 class Application():
 
     # Creating an initialize function that starts without getting called
     def __init__(self , master):
+        self.master = master
+
+        class Assets:
+            pass
+    
+        self.asset = Assets()
+
+        self.load_images()
 
         # Creating the first frame
         frame = Frame(master)
@@ -44,7 +70,59 @@ class Application():
         self.characterError = True
         self.path3 = 0
 
-        openingFrame = Button(frame , image = welcome , command = self.welcome).grid()
+        openingFrame = Button(frame , image = self.asset.welcome , command = self.welcome).grid()
+    
+    def load_images(self):
+        self.asset.welcome = PhotoImage(file=resource_path("./assets/welcome.png"))
+        self.asset.one = PhotoImage(file=resource_path("./assets/1.png"))
+        self.asset.two = PhotoImage(file=resource_path("./assets/2.png"))
+        self.asset.three = PhotoImage(file=resource_path("./assets/3.png"))
+        self.asset.four = PhotoImage(file=resource_path("./assets/4.png"))
+        self.asset.five = PhotoImage(file=resource_path("./assets/5.png"))
+        self.asset.six = PhotoImage(file=resource_path("./assets/6.png"))
+        self.asset.seven = PhotoImage(file=resource_path("./assets/7.png"))
+        self.asset.eight = PhotoImage(file=resource_path("./assets/8.png"))
+        self.asset.nine = PhotoImage(file=resource_path("./assets/9.png"))
+        self.asset.ten = PhotoImage(file=resource_path("./assets/10.png"))
+        self.asset.eleven = PhotoImage(file=resource_path("./assets/11.png"))
+        self.asset.twelve = PhotoImage(file=resource_path("./assets/graveyard.png"))
+        self.asset.thirteen = PhotoImage(file=resource_path("./assets/13.png"))
+        self.asset.forteen = PhotoImage(file=resource_path("./assets/14.png"))
+        self.asset.fifteen = PhotoImage(file=resource_path("./assets/15.png"))
+        self.asset.sixteen = PhotoImage(file=resource_path("./assets/16.png"))
+        self.asset.seventeen = PhotoImage(file=resource_path("./assets/17.png"))
+        self.asset.eighteen = PhotoImage(file=resource_path("./assets/18.png"))
+        self.asset.nineteen = PhotoImage(file=resource_path("./assets/19.png"))
+        self.asset.twenty = PhotoImage(file=resource_path("./assets/20.png"))
+        self.asset.twentyOne = PhotoImage(file=resource_path("./assets/21.png"))
+        self.asset.twentyTwo = PhotoImage(file=resource_path("./assets/22.png"))
+        self.asset.twentyThree = PhotoImage(file=resource_path("./assets/23.png"))
+        self.asset.twentyFour = PhotoImage(file=resource_path("./assets/24.png"))
+        self.asset.twentyFive = PhotoImage(file=resource_path("./assets/25.png"))
+        self.asset.twentySix = PhotoImage(file=resource_path("./assets/26.png"))
+        self.asset.twentySeven = PhotoImage(file=resource_path("./assets/27.png"))
+        self.asset.twentyEight = PhotoImage(file=resource_path("./assets/28.png"))
+        self.asset.twentyNine = PhotoImage(file=resource_path("./assets/29.png"))
+        self.asset.thirty = PhotoImage(file=resource_path("./assets/30.png"))
+        self.asset.thirtyOne = PhotoImage(file=resource_path("./assets/31.png"))
+        self.asset.thirtyTwo = PhotoImage(file=resource_path("./assets/32.png"))
+        self.asset.thirtyThree = PhotoImage(file=resource_path("./assets/33.png"))
+        self.asset.rip = PhotoImage(file=resource_path("./assets/rip.png"))
+        self.asset.character = PhotoImage(file=resource_path("./assets/sprite.png"))
+        self.asset.torch = PhotoImage(file=resource_path("./assets/torch.png"))
+        self.asset.phoneImg = PhotoImage(file=resource_path("./assets/phone.png"))
+        self.asset.umbrellaImg = PhotoImage(file=resource_path("./assets/umbrella.png"))
+        self.asset.fish = PhotoImage(file=resource_path("./assets/fish.png"))
+        self.asset.shovelImg = PhotoImage(file=resource_path("./assets/shovel.png"))
+        self.asset.kniveImg = PhotoImage(file=resource_path("./assets/knive.png"))
+        self.asset.shotgunImg = PhotoImage(file=resource_path("./assets/shotgunImg.png"))
+        self.asset.gameOver = PhotoImage(file=resource_path("./assets/gameover.png"))
+        self.asset.win = PhotoImage(file=resource_path("./assets/win.png"))
+        self.asset.houseImg = PhotoImage(file=resource_path("./assets/house.png"))
+        self.asset.male = PhotoImage(file=resource_path("./assets/male.png"))
+        self.asset.female = PhotoImage(file=resource_path("./assets/female.png"))
+        self.asset.female2 = PhotoImage(file=resource_path("./assets/sprite1.png"))
+        self.asset.exampleImg = PhotoImage(file=resource_path("./assets/example.png"))
 
     #This function represents the character in the bottom middle of the screen and the items on the bottom left
     def sprite(self):
@@ -60,16 +138,16 @@ class Application():
         char = self.spriteVar.get()
 
         if char == "1":
-            image = canvas.create_image(350, 30,  image = male)
+            image = canvas.create_image(350, 30,  image = self.asset.male)
 
         elif char == "2":
-            image = canvas.create_image(350, 30,  image = female)
+            image = canvas.create_image(350, 30,  image = self.asset.female)
         
         elif char == "3":
-            image = canvas.create_image(350, 30,  image = female2)
+            image = canvas.create_image(350, 30,  image = self.asset.female2)
 
         elif char == "4":
-            image = canvas.create_image(350, 30,  image = character)
+            image = canvas.create_image(350, 30,  image = self.asset.character)
         else:
             messagebox.showwarning("Error" , "Please choose a Character") #If a character is not shown a error message is shown
             self.welcome()
@@ -86,7 +164,7 @@ class Application():
         #inventory
         #First a rectangle is drawn, then a torch is added on top of it
         rectangle = canvas.create_rectangle(x , y , width , height , width = 2 , outline = "#FFFF00" )
-        torch1 = canvas.create_image(itemsPosX , itemsPosY , image = torch)
+        torch1 = canvas.create_image(itemsPosX , itemsPosY , image = self.asset.torch)
 
         """There are 3 different paths that can collect more than one item, to arrange the items beside each other 
         , not on top of each other, I created variables for path and each time the user crosses a path, the variable increases"""
@@ -94,42 +172,42 @@ class Application():
 
         if self.path == 1:
             if self.kniveOn == 1:
-                knive = canvas.create_image(itemsPosX + 70, itemsPosY , image = kniveImg)
+                knive = canvas.create_image(itemsPosX + 70, itemsPosY , image = self.asset.kniveImg)
                 rectangle = canvas.create_rectangle(x + 100 , y  , width , height , width = 2 , outline = "#FFFF00" )
 
             if self.umbrellaOn == 1:
-                umbrella = canvas.create_image(itemsPosX + 35 , itemsPosY , image = umbrellaImg)
+                umbrella = canvas.create_image(itemsPosX + 35 , itemsPosY , image = self.asset.umbrellaImg)
                 rectangle = canvas.create_rectangle(x + 65 , y  , width , height , width = 2 , outline = "#FFFF00" )
 
 
             if self.phoneOn == 1:
-                phone = canvas.create_image(itemsPosX + 35 , itemsPosY , image = phoneImg)
+                phone = canvas.create_image(itemsPosX + 35 , itemsPosY , image = self.asset.phoneImg)
                 rectangle = canvas.create_rectangle(x + 65 , y  , width , height , width = 2 , outline = "#FFFF00" )
 
             if self.shovelOn == 1:
-                shovel = canvas.create_image(itemsPosX + 35 , itemsPosY , image = shovelImg)
+                shovel = canvas.create_image(itemsPosX + 35 , itemsPosY , image = self.asset.shovelImg)
                 rectangle = canvas.create_rectangle(x + 65 , y  , width , height , width = 2 , outline = "#FFFF00" )
 
             if self.shotgunOn == 1:
-                shotgun = canvas.create_image(itemsPosX + 35 , itemsPosY , image = shotgunImg)
+                shotgun = canvas.create_image(itemsPosX + 35 , itemsPosY , image = self.asset.shotgunImg)
                 rectangle = canvas.create_rectangle(x + 65 , y  , width , height , width = 2 , outline = "#FFFF00" )
 
         if self.path == 2:
             if self.kniveOn == 1:
-                knive = canvas.create_image(itemsPosX + 105, itemsPosY , image = kniveImg)
+                knive = canvas.create_image(itemsPosX + 105, itemsPosY , image = self.asset.kniveImg)
                 rectangle = canvas.create_rectangle(x + 135 , y  , width , height , width = 2 , outline = "#FFFF00" )
 
             if self.umbrellaOn == 1:
-                umbrella = canvas.create_image(itemsPosX + 70 , itemsPosY , image = umbrellaImg)
+                umbrella = canvas.create_image(itemsPosX + 70 , itemsPosY , image = self.asset.umbrellaImg)
                 rectangle = canvas.create_rectangle(x + 100, y  , width , height , width = 2 , outline = "#FFFF00" )
 
 
             if self.phoneOn == 1:
-                phone = canvas.create_image(itemsPosX + 35 , itemsPosY , image = phoneImg)
+                phone = canvas.create_image(itemsPosX + 35 , itemsPosY , image = self.asset.phoneImg)
                 rectangle = canvas.create_rectangle(x + 65 , y  , width , height , width = 2 , outline = "#FFFF00" )
 
         if self.phoneOn == 1 and self.path3 == 1:
-                shotgun = canvas.create_image(itemsPosX + 70 , itemsPosY , image = shotgunImg)
+                shotgun = canvas.create_image(itemsPosX + 70 , itemsPosY , image = self.asset.shotgunImg)
                 rectangle = canvas.create_rectangle(x + 100 , y  , width , height , width = 2 , outline = "#FFFF00" )
 
         #The health bar
@@ -144,7 +222,7 @@ class Application():
         elif self.health <= 0:
             healthBar2 = canvas.create_rectangle(650 , 20 , 680 , 10 , width=1 , fill = "#FF0000")
             canvas.delete(image)
-            image = canvas.create_image(350, 30,  image = rip)
+            image = canvas.create_image(350, 30,  image = self.asset.rip)
 
 
     def welcome(self):
@@ -179,17 +257,17 @@ class Application():
         
         for text in list:
             Label(frame , text = text , font = ("Times New Roman" , "14") , bg = "black" , fg = "red" ).grid(sticky = W)
-        Label(frame, image = exampleImg , bg = "black" , fg = "white" ).grid()
+        Label(frame, image = self.asset.exampleImg , bg = "black" , fg = "white" ).grid()
         
         Label(frame, text = "Choose your character" , font = ("Times New Roman" , "14") , bg = "black" , fg = "white" ).grid()
 
 
         #Radio Buttons representing the characters
         self.spriteVar = StringVar()
-        Radiobutton(frame, image = male , variable = self.spriteVar , value = "1" , bg = "#000000").grid(sticky = W, row = 9)
-        Radiobutton(frame, image = female , variable = self.spriteVar , value = "2" ,  bg = "#000000").grid(sticky = E , row = 9)
-        Radiobutton(frame, image = female2 , variable = self.spriteVar , value = "3" ,  bg = "#000000").grid(sticky = W , row = 10)
-        Radiobutton(frame, image = character , variable = self.spriteVar , value = "4" ,  bg = "#000000").grid(sticky = E , row = 10)
+        Radiobutton(frame, image = self.asset.male , variable = self.spriteVar , value = "1" , bg = "#000000").grid(sticky = W, row = 9)
+        Radiobutton(frame, image = self.asset.female , variable = self.spriteVar , value = "2" ,  bg = "#000000").grid(sticky = E , row = 9)
+        Radiobutton(frame, image = self.asset.female2 , variable = self.spriteVar , value = "3" ,  bg = "#000000").grid(sticky = W , row = 10)
+        Radiobutton(frame, image = self.asset.character , variable = self.spriteVar , value = "4" ,  bg = "#000000").grid(sticky = E , row = 10)
 
         Button(frame , text = "Next" , bg = "black" , fg = "red" , font = ("Times New Roman" , "14") , command = self.first).grid( sticky = E)
 
@@ -204,10 +282,10 @@ class Application():
         frame = Frame(root).grid()
 
 
-        Label(frame , image = one).grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.one).grid(column = 0 , row = 0)
         button1 = Button(frame , text = "Go through the haunted house?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = self.house).grid(column = 0 , row = 1 , sticky = W + E)
 
-        Label(frame , image = two).grid(column = 1 , row = 0)
+        Label(frame , image = self.asset.two).grid(column = 1 , row = 0)
         button2 = Button(frame , text = "Go through the forest?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = self.left).grid(column = 1 , row = 1 , sticky = W + E)
 
         #All the upcoming functions will call the sprite function to display it in the bottom of the screen
@@ -224,10 +302,10 @@ class Application():
         frame = Frame(root).grid()
 
 
-        Label(frame , image = three).grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.three).grid(column = 0 , row = 0)
         Button(frame , text = "go upstairs?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = self.umbrella).grid(column = 0 , row = 1 , sticky = W + E)
 
-        Label(frame , image = four).grid(column = 1 , row = 0)
+        Label(frame , image = self.asset.four).grid(column = 1 , row = 0)
         Button(frame , text = "go downstairs!" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = self.down).grid(column = 1 , row = 1 , sticky = W + E)
         
         self.sprite()
@@ -241,10 +319,10 @@ class Application():
 
         frame = Frame(root).grid()
 
-        Label(frame , image = seventeen).grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.seventeen).grid(column = 0 , row = 0)
         Button(frame , text = "go to the basement?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = self.phone).grid(column = 0 , row = 1 , sticky = W + E)
 
-        Label(frame , image = eighteen).grid(column = 1 , row = 0)
+        Label(frame , image = self.asset.eighteen).grid(column = 1 , row = 0)
         Button(frame , text = "go to the light at the end of the hallway" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = self.hallway).grid(column = 1 , row = 1 , sticky = W + E)
         
         self.sprite()
@@ -256,7 +334,7 @@ class Application():
 
         frame = Frame(root).grid()
 
-        Label(frame , image = twentyFour ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.twentyFour ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0)
         Label(frame , text = "You step on  nails and get hurt, you lose a life" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1)
         Label(frame , text = "You end up at the back of the house and see a small town" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2)
 
@@ -274,10 +352,10 @@ class Application():
 
         frame = Frame(root).grid()
 
-        Label(frame , image = twentyFive).grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.twentyFive).grid(column = 0 , row = 0)
         Button(frame , text = "go inside the hut?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = self.hut).grid(column = 0 , row = 1 , sticky = W + E)
 
-        Label(frame , image = twentySix).grid(column = 1 , row = 0)
+        Label(frame , image = self.asset.twentySix).grid(column = 1 , row = 0)
         Button(frame , text = "go further in the town" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = self.further).grid(column = 1 , row = 1 , sticky = W + E)
         
         self.sprite()
@@ -291,7 +369,7 @@ class Application():
 
         frame = Frame(root).grid()
 
-        Label(frame , image = twentyEight ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.twentyEight ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0)
         Label(frame , text = "You hear creepy voices around you.. You attempt to run..." ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1)
 
         Button(frame , text = "Next" , bg = "black" , fg = "red" , font = ("Times New Roman" , "14") , command = self.finalFrame).grid(column = 0 , row = 4 , sticky = E)
@@ -308,7 +386,7 @@ class Application():
 
         frame = Frame(root).grid()
 
-        Label(frame , image = twentySeven ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.twentySeven ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0)
         Label(frame , text = "You find a shotgun! It has been added to your inventory" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1)
         Label(frame , text = "You then leave the hut" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2)
 
@@ -334,7 +412,7 @@ class Application():
         frame = Frame(root).grid()
         if self.shotgunOn == 1:
 
-            Label(frame , image = twentyNine ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0)
+            Label(frame , image = self.asset.twentyNine ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0)
             Label(frame , text = "You're suddenly surrounded by zombies" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1)
             
             self.scare1 = 0
@@ -345,7 +423,7 @@ class Application():
 
         else:
             
-            Label(frame , image = twentyNine ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0)
+            Label(frame , image = self.asset.twentyNine ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0)
             Label(frame , text = "You're suddenly surrounded by zombies" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1)
             Button(frame , text = "try to scare them with th torch?" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = lambda: self.dice("0")).grid(column = 0 , row = 2)
 
@@ -360,7 +438,7 @@ class Application():
 
         frame = Frame(root).grid()
 
-        Label(frame , image = thirtyTwo ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.thirtyTwo ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0)
         Label(frame , text = "You find an umbrella!" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1)
         Label(frame , text = "It has been added to your inventory" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2)
 
@@ -380,10 +458,10 @@ class Application():
 
         frame = Frame(root).grid()
 
-        Label(frame , image = twentyOne).grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.twentyOne).grid(column = 0 , row = 0)
         Button(frame , text = "go to the living room?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = self.doll).grid(column = 0 , row = 1 , sticky = W + E)
 
-        Label(frame , image = twentyTwo).grid(column = 1 , row = 0)
+        Label(frame , image = self.asset.twentyTwo).grid(column = 1 , row = 0)
         Button(frame , text = "go to the kitchen?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = self.kitchen).grid(column = 1 , row = 1 , sticky = W + E)
         
         self.sprite()
@@ -399,7 +477,7 @@ class Application():
         #Health is reduced
         self.health -= 1
 
-        Label(frame , image = thirty ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0 , sticky = W + E)
+        Label(frame , image = self.asset.thirty ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0 , sticky = W + E)
         Label(frame , text = "On your way to the kitchen, you slip on water and get hurt!" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
         Label(frame , text = "You Lose a life" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2 , sticky = W + E)
 
@@ -416,7 +494,7 @@ class Application():
 
         frame = Frame(root).grid()
 
-        Label(frame , image = twentyThree ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0 , sticky = W + E)
+        Label(frame , image = self.asset.twentyThree ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0 , sticky = W + E)
         Label(frame , text = "You find a knife! It has been added to your inventory" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
         Label(frame , text = "You try to leave the kitchen but you see the doll! It attacks you before you can move" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2 , sticky = W + E)
 
@@ -437,7 +515,7 @@ class Application():
         self.forgetFrames()
         frame = Frame(root).grid()
 
-        Label(frame , image = twentyThree).grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.twentyThree).grid(column = 0 , row = 0)
         Label(frame , text = "The door closes and a doll crawls to you, you hit it with the umbrella..." , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
         Label(frame , text = "But she hurts you so you lose a life, you then run to the kitchen" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2 , sticky = W + E)
 
@@ -458,7 +536,7 @@ class Application():
 
         frame = Frame(root).grid()
 
-        Label(frame , image = thirtyThree ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.thirtyThree ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 0)
         Label(frame , text = "You find a phone! Sadly, it doesn't have a battery" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1)
         Label(frame , text = "It has been added to your inventory" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2)
 
@@ -481,10 +559,10 @@ class Application():
         #This function takes the user on the second path
         self.path += 1
 
-        Label(frame , image = three).grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.three).grid(column = 0 , row = 0)
         Button(frame , text = "go upstairs to look for battery?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = self.umbrella).grid(column = 0 , row = 1 , sticky = W + E)
 
-        Label(frame , image = eighteen).grid(column = 1 , row = 0)
+        Label(frame , image = self.asset.eighteen).grid(column = 1 , row = 0)
         Button(frame , text = "go back to the hallway?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = self.hallway).grid(column = 1 , row = 1 , sticky = W + E)
         
         self.sprite()
@@ -498,7 +576,7 @@ class Application():
 
         frame = Frame(root).grid()
 
-        Label(frame , image = seven).grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.seven).grid(column = 0 , row = 0)
         Label(frame , text = "You keep walking until you see a lake with someone waving in the end" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1)
 
         Button(frame , text = "Next" , bg = "black" , fg = "red" , font = ("Times New Roman" , "14") , command = self.swimOrRun).grid(sticky = E)
@@ -514,7 +592,7 @@ class Application():
 
         frame = Frame(root).grid()
 
-        Label(frame , image = thirtyOne).grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.thirtyOne).grid(column = 0 , row = 0)
         Label(frame , text = "You fell!! You lost a life!!" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1)
         Label(frame , text = "You end up in a small town" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2)
 
@@ -529,10 +607,10 @@ class Application():
         self.forgetFrames()
         frame = Frame(root).grid()
 
-        Label(frame , image = eight).grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.eight).grid(column = 0 , row = 0)
         Button(frame , text = "Swim to the man?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = self.swim).grid(column = 0 , row = 1 , sticky = W + E)
 
-        Label(frame , image = nine).grid(column = 1 , row = 0)
+        Label(frame , image = self.asset.nine).grid(column = 1 , row = 0)
         Button(frame , text = "Run away?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = self.fallDown).grid(column = 1 , row = 1 , sticky = W + E)
         
         self.sprite()
@@ -544,7 +622,7 @@ class Application():
         self.forgetFrames()
         frame = Frame(root).grid()
 
-        Label(frame , image = ten).grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.ten).grid(column = 0 , row = 0)
         Label(frame , text = "a fish bites you! you lose a life." , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
         
         self.health -= 1
@@ -563,7 +641,7 @@ class Application():
 
         frame = Frame(root).grid()
 
-        Label(frame , image = eleven).grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.eleven).grid(column = 0 , row = 0)
         Label(frame , text = "as you land, you seeing the man holding a saw and is getting closer to you" ,  font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1)
 
         Button(frame , text = "Next" , bg = "black" , fg = "red" , font = ("Times New Roman" , "14") , command = self.graveyardOrSwim).grid(sticky = E)
@@ -576,10 +654,10 @@ class Application():
         frame = Frame(root).grid()
 
 
-        Label(frame , image = twelve).grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.twelve).grid(column = 0 , row = 0)
         Button(frame , text = "Run to a graveyard?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red", command = self.graveyard).grid(column = 0 , row = 1 , sticky = W + E)
 
-        Label(frame , image = fish).grid(column = 1 , row = 0)
+        Label(frame , image = self.asset.fish).grid(column = 1 , row = 0)
         Button(frame , text = "try to swim back?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = self.swim2).grid(column = 1 , row = 1 , sticky = W + E)
         
         self.sprite()
@@ -600,7 +678,7 @@ class Application():
         if int in odd:
             playsound(resource_path('./assets/audio/laugh.mp3'), block=False)
 
-            Label(frame , image = gameOver).grid(column = 0 , row = 0)
+            Label(frame , image = self.asset.gameOver).grid(column = 0 , row = 0)
             Label(frame , text = "A fish bites Again, you lose your second life" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
             self.health -= 1
             self.sprite()
@@ -611,7 +689,7 @@ class Application():
         #if the random number is an even number the user wins
         else:
 
-            Label(frame , image = houseImg).grid(column = 0 , row = 0)
+            Label(frame , image = self.asset.houseImg).grid(column = 0 , row = 0)
             Label(frame , text = "You returned back safely" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
             Label(frame , text = "You find an apple and get your second life back" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2 , sticky = W + E)
             Button(frame , text = "Go back to the house" , bg = "black" , fg = "red" , font = ("Times New Roman" , "14") , command = self.house).grid(row = 4 , sticky = E)
@@ -630,7 +708,7 @@ class Application():
         #The shovel is now visible
         self.shovelOn += 1
 
-        Label(frame , image = thirteen).grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.thirteen).grid(column = 0 , row = 0)
         Label(frame , text = "You find a shovel! It's been added to your inventory!" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
         Label(frame , text = "You hear steps behind you...." , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2 , sticky = W + E)
 
@@ -646,10 +724,10 @@ class Application():
         frame = Frame(root).grid()
 
 
-        Label(frame , image = forteen).grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.forteen).grid(column = 0 , row = 0)
         Button(frame , text = "Look behind you?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red", command = self.turnAround).grid(column = 0 , row = 1 , sticky = W + E)
 
-        Label(frame , image = fifteen).grid(column = 1 , row = 0)
+        Label(frame , image = self.asset.fifteen).grid(column = 1 , row = 0)
         Button(frame , text = "RUN!!!!" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = self.run).grid(column = 1 , row = 1 , sticky = W + E)
         
         self.sprite()
@@ -663,7 +741,7 @@ class Application():
 
         self.hit += 1
 
-        Label(frame , image = sixteen).grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.sixteen).grid(column = 0 , row = 0)
         Label(frame , text = "You see the man!" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
         Button(frame , text = "hit him with the shovel?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = lambda: self.dice("4")).grid(column = 0 , row = 2 , sticky = W)
         Button(frame , text = "Scare him with the torch?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = lambda: self.dice("5")).grid(column = 0 , row = 2 , sticky = E)
@@ -680,7 +758,7 @@ class Application():
 
         self.hit += 1
 
-        Label(frame , image = sixteen).grid(column = 0 , row = 0)
+        Label(frame , image = self.asset.sixteen).grid(column = 0 , row = 0)
         Label(frame , text = "You ran and suddenly see him standing in front of you!" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
         Button(frame , text = "hit him with the shovel?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = lambda: self.dice("4")).grid(column = 0 , row = 2 , sticky = W)
         Button(frame , text = "Scare him with the torch?" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red" , command = lambda: self.dice("5")).grid(column = 0 , row = 2 , sticky = E)
@@ -707,39 +785,39 @@ class Application():
 
             if self.hit == 1: #win
                 if scare == "4":
-                    Label(frame , image = win).grid(column = 0 , row = 0)
+                    Label(frame , image = self.asset.win).grid(column = 0 , row = 0)
                     Label(frame , text = "You hit him with the shovel! But he's a nice guy and will help you out" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
                     Label(frame , text = "You won!" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2 , sticky = W + E)
                     self.sprite()
 
                 if scare == "5":
-                    Label(frame , image = win).grid(column = 0 , row = 0)
+                    Label(frame , image = self.asset.win).grid(column = 0 , row = 0)
                     Label(frame , text = "You flash the torch in his face! But he's a nice guy and will help you out" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
                     Label(frame , text = "You won!" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2 , sticky = W + E)
                     self.sprite()
 
             elif self.hit == 2:
                 if scare == "2":
-                    Label(frame , image = win).grid(column = 0 , row = 0 , sticky = W + E)
+                    Label(frame , image = self.asset.win).grid(column = 0 , row = 0 , sticky = W + E)
                     Label(frame , text = "You hit it with the knife and kill it!" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
                     Label(frame , text = "You find a phone and the charger call for help" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2 , sticky = W + E)
                     self.sprite()
 
                 if scare == "3":
-                    Label(frame , image = win).grid(column = 0 , row = 0 , sticky = W + E)
+                    Label(frame , image = self.asset.win).grid(column = 0 , row = 0 , sticky = W + E)
                     Label(frame , text = "You hit it with the umbrella!" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
                     Label(frame , text = "You find a phone and the charger so you call for help" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2 , sticky = W + E)
                     self.sprite()
 
             elif self.hit == 3:
                 if scare == "1":
-                    Label(frame , image = win).grid(column = 0 , row = 0 , sticky = W + E)
+                    Label(frame , image = self.asset.win).grid(column = 0 , row = 0 , sticky = W + E)
                     Label(frame , text = "You try scaring with the shotgun!" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
                     Label(frame , text = "They feel threatened which gives time to escape" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2 , sticky = W + E)
                     self.sprite()
 
                 if scare == "0":
-                    Label(frame , image = win).grid(column = 0 , row = 0 , sticky = W + E)
+                    Label(frame , image = self.asset.win).grid(column = 0 , row = 0 , sticky = W + E)
                     Label(frame , text = "You try scaring with the torch!" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
                     Label(frame , text = "They feel threatened which gives time to escape" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2 , sticky = W + E)
                     self.sprite()
@@ -754,35 +832,35 @@ class Application():
 
             if self.hit == 1:
                 if scare == "4":
-                    Label(frame , image = gameOver).grid(column = 0 , row = 0)
+                    Label(frame , image = self.asset.gameOver).grid(column = 0 , row = 0)
                     Label(frame , text = "You hit him with the shovel! But he gets angry and kills you" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
                     Label(frame , text = "Game over" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2 , sticky = W + E)
                
                 if scare == "5":
-                    Label(frame , image = gameOver).grid(column = 0 , row = 0)
+                    Label(frame , image = self.asset.gameOver).grid(column = 0 , row = 0)
                     Label(frame , text = "You flash the torch in his face! But he gets angry and kills you" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
                     Label(frame , text = "Game over" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2 , sticky = W + E)
                
 
             if self.hit == 2:
                 if scare == "2":
-                    Label(frame , image = gameOver).grid(column = 0 , row = 0)
+                    Label(frame , image = self.asset.gameOver).grid(column = 0 , row = 0)
                     Label(frame , text = "You hit it with the knife! But it gets angry and kills you" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
                     Label(frame , text = "Game over" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2 , sticky = W + E)
             
                 if scare == "3":
-                    Label(frame , image = gameOver).grid(column = 0 , row = 0)
+                    Label(frame , image = self.asset.gameOver).grid(column = 0 , row = 0)
                     Label(frame , text = "You hit it with the umbrella! But it gets angry and kills you" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
                     Label(frame , text = "Game over" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2 , sticky = W + E)
  
 
             if self.hit == 3:
                 if scare == "1":
-                    Label(frame , image = gameOver).grid(column = 0 , row = 0)
+                    Label(frame , image = self.asset.gameOver).grid(column = 0 , row = 0)
                     Label(frame , text = "You try scaring with with the shotgun! But it does not work" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
                     Label(frame , text = "Game over" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2 , sticky = W + E)
                 if scare == "0":
-                    Label(frame , image = gameOver).grid(column = 0 , row = 0)
+                    Label(frame , image = self.asset.gameOver).grid(column = 0 , row = 0)
                     Label(frame , text = "You try scaring with the torch! But it does not work" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 1 , sticky = W + E)
                     Label(frame , text = "Game over" , font = ("Times New Roman" , "16") , bg = "black" , fg = "red").grid(column = 0 , row = 2 , sticky = W + E)
 
@@ -802,91 +880,20 @@ class Application():
         root.quit()
         root.destroy()
 
-
-
-
-
-
-
-        
-
-#The main window
+# The main window
 root = Tk()
-
-root.geometry("707x405")
-
 root.title("Waed's Horror Adventure game")
-
+root.lift()
+root.attributes('-topmost', True)
+root.after_idle(root.attributes, '-topmost', False)
+root.focus_force()
+x = (root.winfo_screenwidth() // 2) - (707 // 2)
+y = (root.winfo_screenheight() // 2) - (405 // 2)
+root.geometry(f"707x405+{x}+{y}")
 root.configure(bg ="#000000")
-
-#to aviod the user fromr resizing the window
 root.resizable(False, False)
 
-
-
-
-#Inserting the images used in the stories, characters and items
-try:
-
-    welcome = PhotoImage(file=resource_path("./assets/welcome.png"))
-    one = PhotoImage(file=resource_path("./assets/1.png"))
-    two = PhotoImage(file=resource_path("./assets/2.png"))
-    three = PhotoImage(file=resource_path("./assets/3.png"))
-    four = PhotoImage(file=resource_path("./assets/4.png"))
-    five = PhotoImage(file=resource_path("./assets/5.png"))
-    six = PhotoImage(file=resource_path("./assets/6.png"))
-    seven = PhotoImage(file=resource_path("./assets/7.png"))
-    eight = PhotoImage(file=resource_path("./assets/8.png"))
-    nine = PhotoImage(file=resource_path("./assets/9.png"))
-    ten = PhotoImage(file=resource_path("./assets/10.png"))
-    eleven = PhotoImage(file=resource_path("./assets/11.png"))
-    twelve = PhotoImage(file=resource_path("./assets/graveyard.png"))
-    thirteen = PhotoImage(file=resource_path("./assets/13.png"))
-    forteen = PhotoImage(file=resource_path("./assets/14.png"))
-    fifteen = PhotoImage(file=resource_path("./assets/15.png"))
-    sixteen = PhotoImage(file=resource_path("./assets/16.png"))
-    seventeen = PhotoImage(file=resource_path("./assets/17.png"))
-    eighteen = PhotoImage(file=resource_path("./assets/18.png"))
-    nineteen = PhotoImage(file=resource_path("./assets/19.png"))
-    twenty = PhotoImage(file=resource_path("./assets/20.png"))
-    twentyOne = PhotoImage(file=resource_path("./assets/21.png"))
-    twentyTwo = PhotoImage(file=resource_path("./assets/22.png"))
-    twentyThree = PhotoImage(file=resource_path("./assets/23.png"))
-    twentyFour = PhotoImage(file=resource_path("./assets/24.png"))
-    twentyFive = PhotoImage(file=resource_path("./assets/25.png"))
-    twentySix = PhotoImage(file=resource_path("./assets/26.png"))
-    twentySeven = PhotoImage(file=resource_path("./assets/27.png"))
-    twentyEight = PhotoImage(file=resource_path("./assets/28.png"))
-    twentyNine = PhotoImage(file=resource_path("./assets/29.png"))
-    thirty = PhotoImage(file=resource_path("./assets/30.png"))
-    thirtyOne = PhotoImage(file=resource_path("./assets/31.png"))
-    thirtyTwo = PhotoImage(file=resource_path("./assets/32.png"))
-    thirtyThree = PhotoImage(file=resource_path("./assets/33.png"))
-    rip = PhotoImage(file=resource_path("./assets/rip.png"))
-    character = PhotoImage(file=resource_path("./assets/sprite.png"))
-    torch = PhotoImage(file=resource_path("./assets/torch.png"))
-    phoneImg = PhotoImage(file=resource_path("./assets/phone.png"))
-    umbrellaImg = PhotoImage(file=resource_path("./assets/umbrella.png"))
-    fish = PhotoImage(file=resource_path("./assets/fish.png"))
-    shovelImg = PhotoImage(file=resource_path("./assets/shovel.png"))
-    kniveImg = PhotoImage(file=resource_path("./assets/knive.png"))
-    shotgunImg = PhotoImage(file=resource_path("./assets/shotgunImg.png"))
-    gameOver = PhotoImage(file=resource_path("./assets/gameover.png"))
-    win = PhotoImage(file=resource_path("./assets/win.png"))
-    houseImg = PhotoImage(file=resource_path("./assets/house.png"))
-    male = PhotoImage(file=resource_path("./assets/male.png"))
-    female = PhotoImage(file=resource_path("./assets/female.png"))
-    female2 = PhotoImage(file=resource_path("./assets/sprite1.png"))
-    exampleImg = PhotoImage(file=resource_path("./assets/example.png"))
-
-except:
-    root.quit()
-
-
-#assiging a variable for the class
 a = Application(root)
-
-#creating a loop to keep the window open
 root.mainloop()
 
 
