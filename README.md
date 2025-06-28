@@ -85,7 +85,7 @@ pip install pydub simpleaudio
 python main.py
 ```
 
-### 4. ▶️ To create one file application 
+### 4. ⚙️ To create one file application 
 
 ```bash
 pyinstaller ../main.py --onefile --windowed --add-data "../assets:assets"
