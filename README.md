@@ -1,4 +1,4 @@
-# Choose-Your-Own-Adventure Game (Python + Tkinter)
+# Choose Your Own Adventure Horror Game (Python + Tkinter)
 
 This is a simple choose-your-own-adventure game built with Python and Tkinter for the GUI, and optional sound playback.
 
