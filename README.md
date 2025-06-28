@@ -8,7 +8,7 @@ Get the latest version of the app:
 
 | Platform | File |
 |----------|------|
-| 🖥 macOS | [Download .app (zipped)](https://github.com/waed-star/adventure-game/releases/download/v1.0/Horror-Game.zip) |
+| 🖥 macOS | [Download .app (zipped)](https://github.com/waed-star/adventure-game/releases/download/v1.0/Horror-Game-Mac.zip) |
 | 🪟 Windows | [Download .exe (zipped)](https://github.com/waed-star/adventure-game/releases/download/v1.0/Horror-Game-Win.zip) |
 
 
