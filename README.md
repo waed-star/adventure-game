@@ -9,6 +9,8 @@ Get the latest version of the app:
 | Platform | File |
 |----------|------|
 | 🖥 macOS | [Download .app (zipped)](https://github.com/waed-star/adventure-game/releases/download/v1.0/Horror-Game.zip) |
+| 🪟 Windows | [Download .exe (zipped)](https://github.com/waed-star/adventure-game/releases/download/v1.0/Horror-Game-Win.zip) |
+
 
 > ⚠️ macOS users: You may need to right-click → Open the first time to bypass Gatekeeper.
 
